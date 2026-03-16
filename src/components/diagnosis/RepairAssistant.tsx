@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Card, Button, Badge } from '@/components/ui';
 import { DiagnosisResult } from '@/types';
+import { API_BASE_URL } from '@/lib/config';
 import {
   MessageCircle,
   X,
@@ -112,7 +113,7 @@ Estimated total time: ${result.estimatedTotalTime}`;
         ]),
       ];
 
-      const response = await fetch('/api/chat', {
+      const response = await fetch(`${API_BASE_URL}/api/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

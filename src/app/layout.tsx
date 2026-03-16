@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import '@/styles/globals.css';
+import { CapacitorProvider } from '@/components/CapacitorProvider';
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -29,11 +30,16 @@ export default function RootLayout({
     <html lang="en" className="scroll-smooth">
       <head>
         <link rel="icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="theme-color" content="#22c55e" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
       <body className="min-h-screen-dynamic bg-surface-50 antialiased">
-        {children}
+        <CapacitorProvider>{children}</CapacitorProvider>
       </body>
     </html>
   );

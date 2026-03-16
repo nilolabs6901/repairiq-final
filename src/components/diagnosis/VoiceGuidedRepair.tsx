@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
+import { API_BASE_URL } from '@/lib/config';
 import { Card, Badge, Button } from '@/components/ui';
 import { TroubleshootingStep } from '@/types';
 import {
@@ -73,7 +74,7 @@ export function VoiceGuidedRepair({
   useEffect(() => {
     const checkElevenLabs = async () => {
       try {
-        const response = await fetch('/api/elevenlabs', { method: 'GET' });
+        const response = await fetch(`${API_BASE_URL}/api/elevenlabs`, { method: 'GET' });
         const data = await response.json();
         setElevenLabsAvailable(data.available === true);
       } catch {
@@ -163,7 +164,7 @@ export function VoiceGuidedRepair({
     try {
       setIsSpeaking(true);
 
-      const response = await fetch('/api/elevenlabs', {
+      const response = await fetch(`${API_BASE_URL}/api/elevenlabs`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text }),

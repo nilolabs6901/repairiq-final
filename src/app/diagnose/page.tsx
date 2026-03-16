@@ -4,6 +4,9 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { API_BASE_URL } from '@/lib/config';
+import { shareDiagnosis } from '@/lib/shareResult';
+import { hapticSuccess } from '@/lib/haptics';
 import { Header } from '@/components/layout';
 import { Button, Card, Badge } from '@/components/ui';
 import {
@@ -83,15 +86,12 @@ export default function DiagnosePage() {
   const handleShareRepair = async () => {
     if (result) {
       try {
-        await navigator.share({
-          title: `RepairIQ Diagnosis: ${result.itemDescription}`,
-          text: result.summary,
-          url: window.location.href,
-        });
+        await shareDiagnosis(result);
+        hapticSuccess();
       } catch {
         // Fallback: copy to clipboard
-        await navigator.clipboard.writeText(window.location.href);
-        alert('Link copied to clipboard!');
+        await navigator.clipboard.writeText(result.summary);
+        alert('Diagnosis copied to clipboard!');
       }
     }
   };
@@ -108,7 +108,7 @@ export default function DiagnosePage() {
   // Handle voice mode message sending - calls API directly for voice mode with simpler prompts
   const handleVoiceSendMessage = async (content: string): Promise<string> => {
     try {
-      const response = await fetch('/api/chat', {
+      const response = await fetch(`${API_BASE_URL}/api/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

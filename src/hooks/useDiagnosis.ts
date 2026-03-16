@@ -6,6 +6,7 @@ import { Message, RepairSession, DiagnosticStage, DiagnosisResult } from '@/type
 import { saveSession, getSession, setCurrentSessionId } from '@/lib/storage';
 import { INITIAL_GREETING, getStageFromMessageCount } from '@/lib/prompts';
 import { getCachedDiagnosis, cacheDiagnosis } from '@/lib/cache';
+import { API_BASE_URL } from '@/lib/config';
 
 export function useDiagnosis(sessionId?: string) {
   const [session, setSession] = useState<RepairSession | null>(null);
@@ -109,7 +110,7 @@ export function useDiagnosis(sessionId?: string) {
         }
 
         // Call API
-        const response = await fetch('/api/chat', {
+        const response = await fetch(`${API_BASE_URL}/api/chat`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

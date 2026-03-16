@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { API_BASE_URL } from '@/lib/config';
 import {
   MapPin,
   Phone,
@@ -278,7 +279,7 @@ export function LocalProfessionals({ itemType, diagnosisId, issueTitle }: LocalP
       setProsError(null);
 
       try {
-        const response = await fetch('/api/professionals', {
+        const response = await fetch(`${API_BASE_URL}/api/professionals`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

@@ -6,6 +6,9 @@ import { useDropzone } from 'react-dropzone';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui';
 import { Send, Image, X, Paperclip, Loader2, Mic, MicOff, Camera, Video } from 'lucide-react';
+import { hapticTap } from '@/lib/haptics';
+import { isNative } from '@/lib/platform';
+import { pickImageNative } from '@/lib/imagePicker';
 
 interface ChatInputProps {
   onSend: (message: string, images?: string[]) => void;
@@ -176,12 +179,21 @@ export function ChatInput({ onSend, disabled, placeholder = "Describe what's bro
 
   const handleSubmit = useCallback(() => {
     if ((!message.trim() && images.length === 0) || disabled) return;
+    hapticTap();
     onSend(message.trim(), images.length > 0 ? images : undefined);
     setMessage('');
     setImages([]);
     clearTranscript(); // Clear voice transcript on send
     if (isListening) stopListening();
   }, [message, images, disabled, onSend, clearTranscript, isListening, stopListening]);
+
+  const handleNativeCamera = useCallback(async (source: 'camera' | 'gallery') => {
+    const result = await pickImageNative(source);
+    if (result && images.length < 4) {
+      hapticTap();
+      setImages(prev => [...prev, result.dataUrl]);
+    }
+  }, [images.length]);
 
   const toggleVoice = useCallback(() => {
     if (isListening) {
@@ -292,19 +304,50 @@ export function ChatInput({ onSend, disabled, placeholder = "Describe what's bro
 
         {/* Input area */}
         <div className="flex items-end gap-2 p-2">
-          <button
-            onClick={open}
-            disabled={disabled || images.length >= 4}
-            className={cn(
-              'p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl transition-colors touch-manipulation',
-              disabled || images.length >= 4
-                ? 'text-surface-300 cursor-not-allowed'
-                : 'text-surface-400 hover:bg-surface-100 hover:text-surface-600'
-            )}
-            title="Upload photo or video of the problem"
-          >
-            <Camera className="w-5 h-5" />
-          </button>
+          {isNative() ? (
+            <>
+              <button
+                onClick={() => handleNativeCamera('camera')}
+                disabled={disabled || images.length >= 4}
+                className={cn(
+                  'p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl transition-colors touch-manipulation',
+                  disabled || images.length >= 4
+                    ? 'text-surface-300 cursor-not-allowed'
+                    : 'text-surface-400 hover:bg-surface-100 hover:text-surface-600'
+                )}
+                title="Take a photo"
+              >
+                <Camera className="w-5 h-5" />
+              </button>
+              <button
+                onClick={() => handleNativeCamera('gallery')}
+                disabled={disabled || images.length >= 4}
+                className={cn(
+                  'p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl transition-colors touch-manipulation',
+                  disabled || images.length >= 4
+                    ? 'text-surface-300 cursor-not-allowed'
+                    : 'text-surface-400 hover:bg-surface-100 hover:text-surface-600'
+                )}
+                title="Choose from gallery"
+              >
+                <Image className="w-5 h-5" />
+              </button>
+            </>
+          ) : (
+            <button
+              onClick={open}
+              disabled={disabled || images.length >= 4}
+              className={cn(
+                'p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl transition-colors touch-manipulation',
+                disabled || images.length >= 4
+                  ? 'text-surface-300 cursor-not-allowed'
+                  : 'text-surface-400 hover:bg-surface-100 hover:text-surface-600'
+              )}
+              title="Upload photo or video of the problem"
+            >
+              <Camera className="w-5 h-5" />
+            </button>
+          )}
 
           {/* Voice input button */}
           {isSupported && (

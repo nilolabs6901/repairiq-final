@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
+import { API_BASE_URL } from '@/lib/config';
 import { Card, Badge, Button } from '@/components/ui';
 import {
   Mic,
@@ -79,7 +80,7 @@ export function VoiceGuidedDiagnosis({
     const checkElevenLabs = async () => {
       try {
         console.log('Checking ElevenLabs availability...');
-        const response = await fetch('/api/elevenlabs', {
+        const response = await fetch(`${API_BASE_URL}/api/elevenlabs`, {
           method: 'GET',
         });
         const data = await response.json();
@@ -113,7 +114,7 @@ export function VoiceGuidedDiagnosis({
         .replace(/[A-E]\)/g, 'Option ')
         .trim();
 
-      const response = await fetch('/api/elevenlabs', {
+      const response = await fetch(`${API_BASE_URL}/api/elevenlabs`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text: cleanText }),

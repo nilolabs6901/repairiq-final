@@ -1,0 +1,25 @@
+{
+  "name": "RepairIQ - Smart Home Repair Diagnostics",
+  "short_name": "RepairIQ",
+  "description": "AI-powered repair diagnostics for your home. Get expert guidance to fix broken appliances, plumbing, electrical, and more.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fafafa",
+  "theme_color": "#22c55e",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["utilities", "lifestyle"]
+}

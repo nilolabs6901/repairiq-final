@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Phone, Mail, Clock, AlertTriangle, CheckCircle, MapPin, User } from 'lucide-react';
 import { Button, Input, Textarea, Card, Badge } from '@/components/ui';
 import { LeadCapture, LocalProfessional } from '@/types';
+import { API_BASE_URL } from '@/lib/config';
 
 interface GetQuoteModalProps {
   isOpen: boolean;
@@ -47,7 +48,7 @@ export function GetQuoteModal({
     setError(null);
 
     try {
-      const response = await fetch('/api/leads', {
+      const response = await fetch(`${API_BASE_URL}/api/leads`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
