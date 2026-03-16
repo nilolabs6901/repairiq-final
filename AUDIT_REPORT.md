@@ -132,7 +132,7 @@
 | `package.json` | Dependencies (v1.0.0) | Complete | 12 deps, 8 devDeps. No test framework. No Capacitor. No database client |
 | `next.config.js` | Next.js config | Minimal | `reactStrictMode: true`, image domains only. **No `output: 'export'`** for static generation |
 | `tailwind.config.ts` | Full custom theme | Complete | Brand colors, custom animations, shadows |
-| `tsconfig.json` | TypeScript config | Complete | Strict mode, path aliases |
+| `tsconfig.json` | TypeScript config | Complete | Strict mode, path aliases. **Line 35 has hardcoded Windows path artifact:** `C:\Users\kenne\AppData\Local\Temp\repairiq-next/types/**/*.ts` — should be removed |
 | `postcss.config.js` | PostCSS with Tailwind | Complete | — |
 | `.env.example` | Environment template | Partial | Missing: `GOOGLE_PLACES_API_KEY`, `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `SENDGRID_API_KEY`, `LEAD_WEBHOOK_URL` |
 | `CLAUDE.md` | Project documentation | Complete | Excellent and thorough |
@@ -530,6 +530,8 @@ npx cap add android
 8. **Hardcoded development secret** in `src/lib/auth.ts` line 44: `secret: process.env.NEXTAUTH_SECRET || 'development-secret-key'`. If NEXTAUTH_SECRET isn't set, auth uses a known secret.
 
 9. **`.env.example` is incomplete.** Missing 5+ environment variables that the code actually uses.
+
+10. **`tsconfig.json` has hardcoded Windows path** on line 35: `C:\Users\kenne\AppData\Local\Temp\repairiq-next/types/**/*.ts`. This is a developer machine artifact that should be removed.
 
 ---
 
