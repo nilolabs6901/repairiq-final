@@ -17,7 +17,7 @@ import { RepairCheckpoint } from './RepairCheckpoint';
 import { SafetyGuard } from './SafetyGuard';
 import { CostComparison } from './CostComparison';
 import { DiagnosisResult, LikelyIssue, TroubleshootingStep, Part, YouTubeVideo, AppRating } from '@/types';
-import { hasRatedDiagnosis } from '@/lib/storage';
+import { hasRatedDiagnosis, getDiagnosisHelpfulness, saveDiagnosisHelpfulness } from '@/lib/storage';
 import {
   AlertTriangle,
   CheckCircle,
@@ -37,6 +37,7 @@ import {
   Gauge,
   Info,
   ThumbsUp,
+  ThumbsDown,
   Store,
   ClipboardCheck,
   Volume2,
@@ -383,6 +384,7 @@ export function DiagnosisResults({ result, onSave, onShare, onReportOutcome, isS
   const [showSafetyGuard, setShowSafetyGuard] = useState(false);
   const [showCostComparison, setShowCostComparison] = useState(false);
   const [skillResult, setSkillResult] = useState<SkillResult | null>(null);
+  const [helpfulness, setHelpfulness] = useState<boolean | null>(() => getDiagnosisHelpfulness(result.id));
 
   const handleRatingSubmit = (rating: AppRating) => {
     setHasRated(true);
@@ -510,6 +512,53 @@ export function DiagnosisResults({ result, onSave, onShare, onReportOutcome, isS
               </div>
             </motion.div>
           )}
+        </Card>
+      </motion.div>
+
+      {/* Was This Helpful? Inline Feedback */}
+      <motion.div variants={item}>
+        <Card padding="md" className="bg-surface-50 border-surface-200">
+          <div className="flex items-center justify-between gap-4">
+            <p className="text-sm font-medium text-surface-700">Was this diagnosis helpful?</p>
+            {helpfulness === null ? (
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => {
+                    saveDiagnosisHelpfulness(result.id, true);
+                    setHelpfulness(true);
+                  }}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-surface-200 hover:bg-brand-50 hover:border-brand-300 text-surface-600 hover:text-brand-600 transition-colors text-sm"
+                >
+                  <ThumbsUp className="w-4 h-4" />
+                  Yes
+                </button>
+                <button
+                  onClick={() => {
+                    saveDiagnosisHelpfulness(result.id, false);
+                    setHelpfulness(false);
+                  }}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-surface-200 hover:bg-rose-50 hover:border-rose-300 text-surface-600 hover:text-rose-600 transition-colors text-sm"
+                >
+                  <ThumbsDown className="w-4 h-4" />
+                  No
+                </button>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2 text-sm">
+                {helpfulness ? (
+                  <span className="flex items-center gap-1.5 text-brand-600 font-medium">
+                    <ThumbsUp className="w-4 h-4" />
+                    Thanks for the feedback!
+                  </span>
+                ) : (
+                  <span className="flex items-center gap-1.5 text-surface-500">
+                    <ThumbsDown className="w-4 h-4" />
+                    Thanks — we&apos;ll work on improving.
+                  </span>
+                )}
+              </div>
+            )}
+          </div>
         </Card>
       </motion.div>
 

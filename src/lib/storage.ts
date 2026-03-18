@@ -7,6 +7,7 @@ const SAVED_REPAIRS_KEY = 'repairiq_saved_repairs';
 const OUTCOMES_KEY = 'repairiq_outcomes';
 const RATINGS_KEY = 'repairiq_ratings';
 const HAS_RATED_KEY = 'repairiq_has_rated';
+const HELPFULNESS_KEY = 'repairiq_helpfulness';
 
 export function getSessions(): RepairSession[] {
   if (typeof window === 'undefined') return [];
@@ -184,4 +185,35 @@ export function getAverageAppRating(): number {
   if (ratings.length === 0) return 0;
   const sum = ratings.reduce((acc, r) => acc + r.rating, 0);
   return Math.round((sum / ratings.length) * 10) / 10;
+}
+
+// Helpfulness feedback (simple thumbs up/down per diagnosis)
+export function getHelpfulnessFeedback(): Record<string, boolean> {
+  if (typeof window === 'undefined') return {};
+  const data = localStorage.getItem(HELPFULNESS_KEY);
+  return parseJSONSafely<Record<string, boolean>>(data || '{}', {});
+}
+
+export function getDiagnosisHelpfulness(diagnosisId: string): boolean | null {
+  const feedback = getHelpfulnessFeedback();
+  return feedback[diagnosisId] ?? null;
+}
+
+export function saveDiagnosisHelpfulness(diagnosisId: string, wasHelpful: boolean): void {
+  if (typeof window === 'undefined') return;
+  const feedback = getHelpfulnessFeedback();
+  feedback[diagnosisId] = wasHelpful;
+  localStorage.setItem(HELPFULNESS_KEY, JSON.stringify(feedback));
+}
+
+export function getHelpfulnessStats(): { total: number; helpful: number; rate: number } {
+  const feedback = getHelpfulnessFeedback();
+  const entries = Object.values(feedback);
+  if (entries.length === 0) return { total: 0, helpful: 0, rate: 0 };
+  const helpful = entries.filter(Boolean).length;
+  return {
+    total: entries.length,
+    helpful,
+    rate: Math.round((helpful / entries.length) * 100),
+  };
 }

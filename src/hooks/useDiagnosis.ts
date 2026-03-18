@@ -3,7 +3,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { Message, RepairSession, DiagnosticStage, DiagnosisResult } from '@/types';
-import { saveSession, getSession, setCurrentSessionId } from '@/lib/storage';
+import { saveSession, getSession, setCurrentSessionId, saveRepair } from '@/lib/storage';
 import { INITIAL_GREETING, getStageFromMessageCount } from '@/lib/prompts';
 import { getCachedDiagnosis, cacheDiagnosis } from '@/lib/cache';
 import { API_BASE_URL } from '@/lib/config';
@@ -104,6 +104,7 @@ export function useDiagnosis(sessionId?: string) {
 
             setSession(finalSession);
             saveSession(finalSession);
+            saveRepair(cached.result);
             setIsLoading(false);
             return;
           }
@@ -147,10 +148,11 @@ export function useDiagnosis(sessionId?: string) {
         setSession(finalSession);
         saveSession(finalSession);
 
-        // Cache the result if we got a diagnosis
+        // Cache and auto-save the result if we got a diagnosis
         if (data.result) {
           cacheDiagnosis(updatedMessages, data.result);
-          console.log('[Cache Store] Diagnosis cached for future similar queries');
+          saveRepair(data.result);
+          console.log('[Cache Store] Diagnosis cached and auto-saved for future reference');
         }
       } catch (err) {
         setError(err instanceof Error ? err.message : 'An error occurred');
