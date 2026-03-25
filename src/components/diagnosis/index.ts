@@ -19,3 +19,4 @@ export { RepairVideoHub } from './RepairVideoHub';
 export { SkillAssessment } from './SkillAssessment';
 export { RepairCheckpoint } from './RepairCheckpoint';
 export { SafetyGuard } from './SafetyGuard';
+export { RepairReplaceCalculator } from './RepairReplaceCalculator';

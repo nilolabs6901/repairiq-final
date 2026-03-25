@@ -13,6 +13,7 @@ import { RepairAssistant } from '@/components/diagnosis/RepairAssistant';
 import { SmartPartsList } from '@/components/diagnosis/SmartPartsList';
 import { RepairVideoHub } from '@/components/diagnosis/RepairVideoHub';
 import { RepairCheckpoint } from '@/components/diagnosis/RepairCheckpoint';
+import { RepairReplaceCalculator } from '@/components/diagnosis/RepairReplaceCalculator';
 import { getSavedRepairs } from '@/lib/storage';
 import { generateId } from '@/lib/utils';
 import {
@@ -33,6 +34,7 @@ import {
   Send,
   CheckCircle,
   ChevronDown,
+  Calculator,
 } from 'lucide-react';
 
 const container = {
@@ -120,6 +122,15 @@ const TOOLS: ToolCard[] = [
     needsDiagnosis: false,
   },
   {
+    id: 'repair-replace',
+    title: 'Repair vs. Replace',
+    description: 'Enter your appliance age and repair cost to find out if fixing or replacing is smarter',
+    icon: Calculator,
+    color: 'bg-amber-100',
+    iconColor: 'text-amber-600',
+    needsDiagnosis: false,
+  },
+  {
     id: 'tech',
     title: 'Live Tech Support',
     description: 'Connect with a certified technician via video call for hands-on guidance',
@@ -203,6 +214,7 @@ export default function ToolkitPage() {
   const [showSkillAssessment, setShowSkillAssessment] = useState(false);
   const [showCheckpoint, setShowCheckpoint] = useState(false);
   const [showCostComparison, setShowCostComparison] = useState(false);
+  const [showRepairReplace, setShowRepairReplace] = useState(false);
   const [skillResult, setSkillResult] = useState<SkillResult | null>(null);
   const [noDiagnosisAlert, setNoDiagnosisAlert] = useState<string | null>(null);
 
@@ -241,6 +253,7 @@ export default function ToolkitPage() {
       case 'skill': setShowSkillAssessment(true); break;
       case 'progress': setShowCheckpoint(true); break;
       case 'cost': setShowCostComparison(true); break;
+      case 'repair-replace': setShowRepairReplace(true); break;
       case 'tech':
         window.open('https://www.justanswer.com/appliance/', '_blank');
         break;
@@ -510,6 +523,11 @@ export default function ToolkitPage() {
         issueTitle={recentDiagnosis?.likelyIssues[0]?.title || 'General repair'}
         estimatedPartsCost={recentDiagnosis?.estimatedTotalCost || '$50-100'}
         difficulty={recentDiagnosis?.likelyIssues[0]?.difficulty}
+      />
+
+      <RepairReplaceCalculator
+        isOpen={showRepairReplace}
+        onClose={() => setShowRepairReplace(false)}
       />
     </div>
   );
