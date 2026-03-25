@@ -16,6 +16,7 @@ import { SkillAssessment, SkillResult } from './SkillAssessment';
 import { RepairCheckpoint } from './RepairCheckpoint';
 import { SafetyGuard } from './SafetyGuard';
 import { CostComparison } from './CostComparison';
+import { RepairReplaceCalculator } from './RepairReplaceCalculator';
 import { DiagnosisResult, LikelyIssue, TroubleshootingStep, Part, YouTubeVideo, AppRating } from '@/types';
 import { hasRatedDiagnosis } from '@/lib/storage';
 import {
@@ -51,6 +52,7 @@ import {
   Flag,
   DollarSign as DollarIcon,
   MessageCircle,
+  Calculator,
 } from 'lucide-react';
 
 interface DiagnosisResultsProps {
@@ -382,6 +384,7 @@ export function DiagnosisResults({ result, onSave, onShare, onReportOutcome, isS
   const [showCheckpoint, setShowCheckpoint] = useState(false);
   const [showSafetyGuard, setShowSafetyGuard] = useState(false);
   const [showCostComparison, setShowCostComparison] = useState(false);
+  const [showRepairReplace, setShowRepairReplace] = useState(false);
   const [skillResult, setSkillResult] = useState<SkillResult | null>(null);
 
   const handleRatingSubmit = (rating: AppRating) => {
@@ -710,6 +713,19 @@ export function DiagnosisResults({ result, onSave, onShare, onReportOutcome, isS
             </div>
           </Card>
 
+          {/* Repair vs Replace Calculator */}
+          <Card padding="md" hover className="cursor-pointer" onClick={() => setShowRepairReplace(true)}>
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-lg bg-amber-100 flex items-center justify-center">
+                <Calculator className="w-5 h-5 text-amber-600" />
+              </div>
+              <div>
+                <h4 className="font-semibold text-surface-900">Repair vs. Replace</h4>
+                <p className="text-xs text-surface-500">Should you fix it or buy new?</p>
+              </div>
+            </div>
+          </Card>
+
           {/* Virtual Tech */}
           <Card padding="md" hover className="cursor-pointer" onClick={() => {
             const el = document.getElementById('virtual-tech-section');
@@ -925,6 +941,12 @@ export function DiagnosisResults({ result, onSave, onShare, onReportOutcome, isS
         issueTitle={result.likelyIssues[0]?.title || ''}
         estimatedPartsCost={result.estimatedTotalCost}
         difficulty={result.likelyIssues[0]?.difficulty}
+      />
+
+      {/* Repair vs Replace Calculator */}
+      <RepairReplaceCalculator
+        isOpen={showRepairReplace}
+        onClose={() => setShowRepairReplace(false)}
       />
     </motion.div>
   );

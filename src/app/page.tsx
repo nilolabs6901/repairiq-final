@@ -1,9 +1,11 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Header, Footer } from '@/components/layout';
 import { Button, Card, Badge } from '@/components/ui';
+import { RepairReplaceCalculator } from '@/components/diagnosis/RepairReplaceCalculator';
 import {
   Wrench,
   Zap,
@@ -26,6 +28,7 @@ import {
   Search,
   HelpCircle,
   Hammer,
+  Calculator,
 } from 'lucide-react';
 
 const features = [
@@ -99,6 +102,8 @@ const item = {
 };
 
 export default function HomePage() {
+  const [showRepairReplace, setShowRepairReplace] = useState(false);
+
   return (
     <div className="min-h-screen bg-surface-50">
       <Header />
@@ -204,6 +209,28 @@ export default function HomePage() {
                 </motion.div>
               </Link>
             </div>
+
+            {/* Repair vs Replace Quick Tool */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="max-w-2xl mx-auto mt-4"
+            >
+              <button
+                onClick={() => setShowRepairReplace(true)}
+                className="w-full flex items-center justify-center gap-3 px-5 py-3 rounded-xl border border-amber-200 bg-amber-50 hover:bg-amber-100 transition-colors group"
+              >
+                <Calculator className="w-5 h-5 text-amber-600" />
+                <span className="font-medium text-surface-800">
+                  Repair vs. Replace Calculator
+                </span>
+                <span className="text-sm text-surface-500">
+                  — should you fix it or buy new?
+                </span>
+                <ArrowRight className="w-4 h-4 text-amber-500 group-hover:translate-x-1 transition-transform" />
+              </button>
+            </motion.div>
 
             <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
               <div className="flex items-center gap-6 text-sm text-surface-500">
@@ -509,6 +536,12 @@ export default function HomePage() {
       </section>
 
       <Footer />
+
+      {/* Repair vs Replace Calculator Modal */}
+      <RepairReplaceCalculator
+        isOpen={showRepairReplace}
+        onClose={() => setShowRepairReplace(false)}
+      />
     </div>
   );
 }
