@@ -14,6 +14,7 @@ import { SmartPartsList } from '@/components/diagnosis/SmartPartsList';
 import { RepairVideoHub } from '@/components/diagnosis/RepairVideoHub';
 import { RepairCheckpoint } from '@/components/diagnosis/RepairCheckpoint';
 import { RepairReplaceCalculator } from '@/components/diagnosis/RepairReplaceCalculator';
+import { ApplianceLifespan } from '@/components/diagnosis/ApplianceLifespan';
 import { getSavedRepairs } from '@/lib/storage';
 import { generateId } from '@/lib/utils';
 import {
@@ -35,6 +36,7 @@ import {
   CheckCircle,
   ChevronDown,
   Calculator,
+  Activity,
 } from 'lucide-react';
 
 const container = {
@@ -131,6 +133,15 @@ const TOOLS: ToolCard[] = [
     needsDiagnosis: false,
   },
   {
+    id: 'lifespan',
+    title: 'Appliance Lifespan',
+    description: 'Check how many years your appliance has left based on its brand and age',
+    icon: Activity,
+    color: 'bg-cyan-100',
+    iconColor: 'text-cyan-600',
+    needsDiagnosis: false,
+  },
+  {
     id: 'tech',
     title: 'Live Tech Support',
     description: 'Connect with a certified technician via video call for hands-on guidance',
@@ -215,6 +226,7 @@ export default function ToolkitPage() {
   const [showCheckpoint, setShowCheckpoint] = useState(false);
   const [showCostComparison, setShowCostComparison] = useState(false);
   const [showRepairReplace, setShowRepairReplace] = useState(false);
+  const [showLifespan, setShowLifespan] = useState(false);
   const [skillResult, setSkillResult] = useState<SkillResult | null>(null);
   const [noDiagnosisAlert, setNoDiagnosisAlert] = useState<string | null>(null);
 
@@ -254,6 +266,7 @@ export default function ToolkitPage() {
       case 'progress': setShowCheckpoint(true); break;
       case 'cost': setShowCostComparison(true); break;
       case 'repair-replace': setShowRepairReplace(true); break;
+      case 'lifespan': setShowLifespan(true); break;
       case 'tech':
         window.open('https://www.justanswer.com/appliance/', '_blank');
         break;
@@ -528,6 +541,11 @@ export default function ToolkitPage() {
       <RepairReplaceCalculator
         isOpen={showRepairReplace}
         onClose={() => setShowRepairReplace(false)}
+      />
+
+      <ApplianceLifespan
+        isOpen={showLifespan}
+        onClose={() => setShowLifespan(false)}
       />
     </div>
   );

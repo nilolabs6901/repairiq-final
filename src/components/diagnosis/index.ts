@@ -20,3 +20,4 @@ export { SkillAssessment } from './SkillAssessment';
 export { RepairCheckpoint } from './RepairCheckpoint';
 export { SafetyGuard } from './SafetyGuard';
 export { RepairReplaceCalculator } from './RepairReplaceCalculator';
+export { ApplianceLifespan } from './ApplianceLifespan';

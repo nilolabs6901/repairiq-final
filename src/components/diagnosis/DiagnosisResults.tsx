@@ -17,6 +17,7 @@ import { RepairCheckpoint } from './RepairCheckpoint';
 import { SafetyGuard } from './SafetyGuard';
 import { CostComparison } from './CostComparison';
 import { RepairReplaceCalculator } from './RepairReplaceCalculator';
+import { ApplianceLifespan } from './ApplianceLifespan';
 import { DiagnosisResult, LikelyIssue, TroubleshootingStep, Part, YouTubeVideo, AppRating } from '@/types';
 import { hasRatedDiagnosis } from '@/lib/storage';
 import {
@@ -53,6 +54,7 @@ import {
   DollarSign as DollarIcon,
   MessageCircle,
   Calculator,
+  Activity,
 } from 'lucide-react';
 
 interface DiagnosisResultsProps {
@@ -385,6 +387,7 @@ export function DiagnosisResults({ result, onSave, onShare, onReportOutcome, isS
   const [showSafetyGuard, setShowSafetyGuard] = useState(false);
   const [showCostComparison, setShowCostComparison] = useState(false);
   const [showRepairReplace, setShowRepairReplace] = useState(false);
+  const [showLifespan, setShowLifespan] = useState(false);
   const [skillResult, setSkillResult] = useState<SkillResult | null>(null);
 
   const handleRatingSubmit = (rating: AppRating) => {
@@ -726,6 +729,19 @@ export function DiagnosisResults({ result, onSave, onShare, onReportOutcome, isS
             </div>
           </Card>
 
+          {/* Appliance Lifespan */}
+          <Card padding="md" hover className="cursor-pointer" onClick={() => setShowLifespan(true)}>
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-lg bg-cyan-100 flex items-center justify-center">
+                <Activity className="w-5 h-5 text-cyan-600" />
+              </div>
+              <div>
+                <h4 className="font-semibold text-surface-900">Appliance Lifespan</h4>
+                <p className="text-xs text-surface-500">Brand reliability & risk score</p>
+              </div>
+            </div>
+          </Card>
+
           {/* Virtual Tech */}
           <Card padding="md" hover className="cursor-pointer" onClick={() => {
             const el = document.getElementById('virtual-tech-section');
@@ -947,6 +963,12 @@ export function DiagnosisResults({ result, onSave, onShare, onReportOutcome, isS
       <RepairReplaceCalculator
         isOpen={showRepairReplace}
         onClose={() => setShowRepairReplace(false)}
+      />
+
+      {/* Appliance Lifespan */}
+      <ApplianceLifespan
+        isOpen={showLifespan}
+        onClose={() => setShowLifespan(false)}
       />
     </motion.div>
   );
