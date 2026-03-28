@@ -7,6 +7,7 @@ import { Header, Footer } from '@/components/layout';
 import { Button, Card, Badge } from '@/components/ui';
 import { RepairReplaceCalculator } from '@/components/diagnosis/RepairReplaceCalculator';
 import { ApplianceLifespan } from '@/components/diagnosis/ApplianceLifespan';
+import { WeeklyTipSignup } from '@/components/diagnosis/WeeklyTipSignup';
 import {
   Wrench,
   Zap,
@@ -543,6 +544,13 @@ export default function HomePage() {
             </Button>
           </Link>
         </motion.div>
+      </section>
+
+      {/* Weekly Tips Email Signup */}
+      <section className="py-12 md:py-16 bg-white">
+        <div className="max-w-xl mx-auto px-4 sm:px-6 lg:px-8">
+          <WeeklyTipSignup />
+        </div>
       </section>
 
       <Footer />

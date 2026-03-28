@@ -18,6 +18,8 @@ import { SafetyGuard } from './SafetyGuard';
 import { CostComparison } from './CostComparison';
 import { RepairReplaceCalculator } from './RepairReplaceCalculator';
 import { ApplianceLifespan } from './ApplianceLifespan';
+import { QuickFeedback } from './QuickFeedback';
+import { WeeklyTipSignup } from './WeeklyTipSignup';
 import { DiagnosisResult, LikelyIssue, TroubleshootingStep, Part, YouTubeVideo, AppRating } from '@/types';
 import { hasRatedDiagnosis } from '@/lib/storage';
 import {
@@ -844,29 +846,16 @@ export function DiagnosisResults({ result, onSave, onShare, onReportOutcome, isS
         issueTitle={result.likelyIssues[0]?.title}
       />
 
-      {/* Report Outcome CTA */}
+      {/* Quick Feedback */}
       <motion.div variants={item}>
-        <Card padding="md" className="bg-gradient-to-r from-brand-50 to-green-50 border-brand-200">
-          <div className="flex items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-brand-100 flex items-center justify-center flex-shrink-0">
-                <ClipboardCheck className="w-5 h-5 text-brand-600" />
-              </div>
-              <div>
-                <h4 className="font-semibold text-surface-900">Did this help?</h4>
-                <p className="text-sm text-surface-600">Report your outcome to help improve future diagnoses</p>
-              </div>
-            </div>
-            <Button
-              variant="primary"
-              size="md"
-              icon={<ThumbsUp className="w-4 h-4" />}
-              onClick={onReportOutcome}
-            >
-              Report Outcome
-            </Button>
-          </div>
+        <Card padding="sm" className="border-surface-200">
+          <QuickFeedback diagnosisId={result.id} />
         </Card>
+      </motion.div>
+
+      {/* Weekly Tips Signup */}
+      <motion.div variants={item}>
+        <WeeklyTipSignup />
       </motion.div>
 
       {/* Rate the App CTA */}
