@@ -1,9 +1,13 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Header, Footer } from '@/components/layout';
 import { Button, Card, Badge } from '@/components/ui';
+import { RepairReplaceCalculator } from '@/components/diagnosis/RepairReplaceCalculator';
+import { ApplianceLifespan } from '@/components/diagnosis/ApplianceLifespan';
+import { WeeklyTipSignup } from '@/components/diagnosis/WeeklyTipSignup';
 import {
   Wrench,
   Zap,
@@ -26,6 +30,8 @@ import {
   Search,
   HelpCircle,
   Hammer,
+  Calculator,
+  Activity,
 } from 'lucide-react';
 
 const features = [
@@ -99,6 +105,9 @@ const item = {
 };
 
 export default function HomePage() {
+  const [showRepairReplace, setShowRepairReplace] = useState(false);
+  const [showLifespan, setShowLifespan] = useState(false);
+
   return (
     <div className="min-h-screen bg-surface-50">
       <Header />
@@ -204,6 +213,35 @@ export default function HomePage() {
                 </motion.div>
               </Link>
             </div>
+
+            {/* Quick Tools */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="max-w-2xl mx-auto mt-4 flex flex-col sm:flex-row gap-2"
+            >
+              <button
+                onClick={() => setShowRepairReplace(true)}
+                className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-amber-200 bg-amber-50 hover:bg-amber-100 transition-colors group"
+              >
+                <Calculator className="w-4 h-4 text-amber-600" />
+                <span className="font-medium text-surface-800 text-sm">
+                  Repair vs. Replace
+                </span>
+                <ArrowRight className="w-3.5 h-3.5 text-amber-500 group-hover:translate-x-1 transition-transform" />
+              </button>
+              <button
+                onClick={() => setShowLifespan(true)}
+                className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-cyan-200 bg-cyan-50 hover:bg-cyan-100 transition-colors group"
+              >
+                <Activity className="w-4 h-4 text-cyan-600" />
+                <span className="font-medium text-surface-800 text-sm">
+                  Appliance Lifespan
+                </span>
+                <ArrowRight className="w-3.5 h-3.5 text-cyan-500 group-hover:translate-x-1 transition-transform" />
+              </button>
+            </motion.div>
 
             <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
               <div className="flex items-center gap-6 text-sm text-surface-500">
@@ -508,7 +546,26 @@ export default function HomePage() {
         </motion.div>
       </section>
 
+      {/* Weekly Tips Email Signup */}
+      <section className="py-12 md:py-16 bg-white">
+        <div className="max-w-xl mx-auto px-4 sm:px-6 lg:px-8">
+          <WeeklyTipSignup />
+        </div>
+      </section>
+
       <Footer />
+
+      {/* Repair vs Replace Calculator Modal */}
+      <RepairReplaceCalculator
+        isOpen={showRepairReplace}
+        onClose={() => setShowRepairReplace(false)}
+      />
+
+      {/* Appliance Lifespan Modal */}
+      <ApplianceLifespan
+        isOpen={showLifespan}
+        onClose={() => setShowLifespan(false)}
+      />
     </div>
   );
 }

@@ -16,6 +16,11 @@ import { SkillAssessment, SkillResult } from './SkillAssessment';
 import { RepairCheckpoint } from './RepairCheckpoint';
 import { SafetyGuard } from './SafetyGuard';
 import { CostComparison } from './CostComparison';
+import { RepairReplaceCalculator } from './RepairReplaceCalculator';
+import { ApplianceLifespan } from './ApplianceLifespan';
+import { QuickFeedback } from './QuickFeedback';
+import { WeeklyTipSignup } from './WeeklyTipSignup';
+import { SaveDiagnosis } from './SaveDiagnosis';
 import { DiagnosisResult, LikelyIssue, TroubleshootingStep, Part, YouTubeVideo, AppRating } from '@/types';
 import { hasRatedDiagnosis } from '@/lib/storage';
 import {
@@ -51,6 +56,8 @@ import {
   Flag,
   DollarSign as DollarIcon,
   MessageCircle,
+  Calculator,
+  Activity,
 } from 'lucide-react';
 
 interface DiagnosisResultsProps {
@@ -382,6 +389,8 @@ export function DiagnosisResults({ result, onSave, onShare, onReportOutcome, isS
   const [showCheckpoint, setShowCheckpoint] = useState(false);
   const [showSafetyGuard, setShowSafetyGuard] = useState(false);
   const [showCostComparison, setShowCostComparison] = useState(false);
+  const [showRepairReplace, setShowRepairReplace] = useState(false);
+  const [showLifespan, setShowLifespan] = useState(false);
   const [skillResult, setSkillResult] = useState<SkillResult | null>(null);
 
   const handleRatingSubmit = (rating: AppRating) => {
@@ -710,6 +719,32 @@ export function DiagnosisResults({ result, onSave, onShare, onReportOutcome, isS
             </div>
           </Card>
 
+          {/* Repair vs Replace Calculator */}
+          <Card padding="md" hover className="cursor-pointer" onClick={() => setShowRepairReplace(true)}>
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-lg bg-amber-100 flex items-center justify-center">
+                <Calculator className="w-5 h-5 text-amber-600" />
+              </div>
+              <div>
+                <h4 className="font-semibold text-surface-900">Repair vs. Replace</h4>
+                <p className="text-xs text-surface-500">Should you fix it or buy new?</p>
+              </div>
+            </div>
+          </Card>
+
+          {/* Appliance Lifespan */}
+          <Card padding="md" hover className="cursor-pointer" onClick={() => setShowLifespan(true)}>
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-lg bg-cyan-100 flex items-center justify-center">
+                <Activity className="w-5 h-5 text-cyan-600" />
+              </div>
+              <div>
+                <h4 className="font-semibold text-surface-900">Appliance Lifespan</h4>
+                <p className="text-xs text-surface-500">Brand reliability & risk score</p>
+              </div>
+            </div>
+          </Card>
+
           {/* Virtual Tech */}
           <Card padding="md" hover className="cursor-pointer" onClick={() => {
             const el = document.getElementById('virtual-tech-section');
@@ -812,29 +847,26 @@ export function DiagnosisResults({ result, onSave, onShare, onReportOutcome, isS
         issueTitle={result.likelyIssues[0]?.title}
       />
 
-      {/* Report Outcome CTA */}
+      {/* Save Diagnosis */}
       <motion.div variants={item}>
-        <Card padding="md" className="bg-gradient-to-r from-brand-50 to-green-50 border-brand-200">
-          <div className="flex items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-brand-100 flex items-center justify-center flex-shrink-0">
-                <ClipboardCheck className="w-5 h-5 text-brand-600" />
-              </div>
-              <div>
-                <h4 className="font-semibold text-surface-900">Did this help?</h4>
-                <p className="text-sm text-surface-600">Report your outcome to help improve future diagnoses</p>
-              </div>
-            </div>
-            <Button
-              variant="primary"
-              size="md"
-              icon={<ThumbsUp className="w-4 h-4" />}
-              onClick={onReportOutcome}
-            >
-              Report Outcome
-            </Button>
-          </div>
+        <SaveDiagnosis
+          diagnosisId={result.id}
+          itemDescription={result.itemDescription}
+          onSave={onSave}
+          isSaved={isSaved}
+        />
+      </motion.div>
+
+      {/* Quick Feedback */}
+      <motion.div variants={item}>
+        <Card padding="sm" className="border-surface-200">
+          <QuickFeedback diagnosisId={result.id} />
         </Card>
+      </motion.div>
+
+      {/* Weekly Tips Signup */}
+      <motion.div variants={item}>
+        <WeeklyTipSignup />
       </motion.div>
 
       {/* Rate the App CTA */}
@@ -925,6 +957,18 @@ export function DiagnosisResults({ result, onSave, onShare, onReportOutcome, isS
         issueTitle={result.likelyIssues[0]?.title || ''}
         estimatedPartsCost={result.estimatedTotalCost}
         difficulty={result.likelyIssues[0]?.difficulty}
+      />
+
+      {/* Repair vs Replace Calculator */}
+      <RepairReplaceCalculator
+        isOpen={showRepairReplace}
+        onClose={() => setShowRepairReplace(false)}
+      />
+
+      {/* Appliance Lifespan */}
+      <ApplianceLifespan
+        isOpen={showLifespan}
+        onClose={() => setShowLifespan(false)}
       />
     </motion.div>
   );
