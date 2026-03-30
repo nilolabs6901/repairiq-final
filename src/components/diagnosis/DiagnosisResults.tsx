@@ -20,6 +20,7 @@ import { RepairReplaceCalculator } from './RepairReplaceCalculator';
 import { ApplianceLifespan } from './ApplianceLifespan';
 import { QuickFeedback } from './QuickFeedback';
 import { WeeklyTipSignup } from './WeeklyTipSignup';
+import { SaveDiagnosis } from './SaveDiagnosis';
 import { DiagnosisResult, LikelyIssue, TroubleshootingStep, Part, YouTubeVideo, AppRating } from '@/types';
 import { hasRatedDiagnosis } from '@/lib/storage';
 import {
@@ -845,6 +846,16 @@ export function DiagnosisResults({ result, onSave, onShare, onReportOutcome, isS
         itemType={result.itemType}
         issueTitle={result.likelyIssues[0]?.title}
       />
+
+      {/* Save Diagnosis */}
+      <motion.div variants={item}>
+        <SaveDiagnosis
+          diagnosisId={result.id}
+          itemDescription={result.itemDescription}
+          onSave={onSave}
+          isSaved={isSaved}
+        />
+      </motion.div>
 
       {/* Quick Feedback */}
       <motion.div variants={item}>

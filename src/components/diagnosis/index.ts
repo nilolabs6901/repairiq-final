@@ -23,3 +23,4 @@ export { RepairReplaceCalculator } from './RepairReplaceCalculator';
 export { ApplianceLifespan } from './ApplianceLifespan';
 export { QuickFeedback } from './QuickFeedback';
 export { WeeklyTipSignup } from './WeeklyTipSignup';
+export { SaveDiagnosis } from './SaveDiagnosis';
