@@ -15,6 +15,7 @@ import { RepairVideoHub } from '@/components/diagnosis/RepairVideoHub';
 import { RepairCheckpoint } from '@/components/diagnosis/RepairCheckpoint';
 import { RepairReplaceCalculator } from '@/components/diagnosis/RepairReplaceCalculator';
 import { ApplianceLifespan } from '@/components/diagnosis/ApplianceLifespan';
+import { RecallChecker } from '@/components/diagnosis/RecallChecker';
 import { getSavedRepairs } from '@/lib/storage';
 import { generateId } from '@/lib/utils';
 import {
@@ -37,6 +38,7 @@ import {
   ChevronDown,
   Calculator,
   Activity,
+  ShieldAlert,
 } from 'lucide-react';
 
 const container = {
@@ -142,6 +144,15 @@ const TOOLS: ToolCard[] = [
     needsDiagnosis: false,
   },
   {
+    id: 'recall',
+    title: 'Recall Checker',
+    description: 'Check if your appliance has an active safety recall from the CPSC database',
+    icon: ShieldAlert,
+    color: 'bg-red-100',
+    iconColor: 'text-red-600',
+    needsDiagnosis: false,
+  },
+  {
     id: 'tech',
     title: 'Live Tech Support',
     description: 'Connect with a certified technician via video call for hands-on guidance',
@@ -227,6 +238,7 @@ export default function ToolkitPage() {
   const [showCostComparison, setShowCostComparison] = useState(false);
   const [showRepairReplace, setShowRepairReplace] = useState(false);
   const [showLifespan, setShowLifespan] = useState(false);
+  const [showRecallChecker, setShowRecallChecker] = useState(false);
   const [skillResult, setSkillResult] = useState<SkillResult | null>(null);
   const [noDiagnosisAlert, setNoDiagnosisAlert] = useState<string | null>(null);
 
@@ -267,6 +279,7 @@ export default function ToolkitPage() {
       case 'cost': setShowCostComparison(true); break;
       case 'repair-replace': setShowRepairReplace(true); break;
       case 'lifespan': setShowLifespan(true); break;
+      case 'recall': setShowRecallChecker(true); break;
       case 'tech':
         window.open('https://www.justanswer.com/appliance/', '_blank');
         break;
@@ -546,6 +559,11 @@ export default function ToolkitPage() {
       <ApplianceLifespan
         isOpen={showLifespan}
         onClose={() => setShowLifespan(false)}
+      />
+
+      <RecallChecker
+        isOpen={showRecallChecker}
+        onClose={() => setShowRecallChecker(false)}
       />
     </div>
   );

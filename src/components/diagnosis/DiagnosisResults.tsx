@@ -21,6 +21,7 @@ import { ApplianceLifespan } from './ApplianceLifespan';
 import { QuickFeedback } from './QuickFeedback';
 import { WeeklyTipSignup } from './WeeklyTipSignup';
 import { SaveDiagnosis } from './SaveDiagnosis';
+import { RecallChecker } from './RecallChecker';
 import { DiagnosisResult, LikelyIssue, TroubleshootingStep, Part, YouTubeVideo, AppRating } from '@/types';
 import { hasRatedDiagnosis } from '@/lib/storage';
 import {
@@ -58,6 +59,7 @@ import {
   MessageCircle,
   Calculator,
   Activity,
+  ShieldAlert,
 } from 'lucide-react';
 
 interface DiagnosisResultsProps {
@@ -391,6 +393,7 @@ export function DiagnosisResults({ result, onSave, onShare, onReportOutcome, isS
   const [showCostComparison, setShowCostComparison] = useState(false);
   const [showRepairReplace, setShowRepairReplace] = useState(false);
   const [showLifespan, setShowLifespan] = useState(false);
+  const [showRecallChecker, setShowRecallChecker] = useState(false);
   const [skillResult, setSkillResult] = useState<SkillResult | null>(null);
 
   const handleRatingSubmit = (rating: AppRating) => {
@@ -745,6 +748,19 @@ export function DiagnosisResults({ result, onSave, onShare, onReportOutcome, isS
             </div>
           </Card>
 
+          {/* Recall Checker */}
+          <Card padding="md" hover className="cursor-pointer" onClick={() => setShowRecallChecker(true)}>
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-lg bg-red-100 flex items-center justify-center">
+                <ShieldAlert className="w-5 h-5 text-red-600" />
+              </div>
+              <div>
+                <h4 className="font-semibold text-surface-900">Recall Checker</h4>
+                <p className="text-xs text-surface-500">CPSC safety recall lookup</p>
+              </div>
+            </div>
+          </Card>
+
           {/* Virtual Tech */}
           <Card padding="md" hover className="cursor-pointer" onClick={() => {
             const el = document.getElementById('virtual-tech-section');
@@ -969,6 +985,13 @@ export function DiagnosisResults({ result, onSave, onShare, onReportOutcome, isS
       <ApplianceLifespan
         isOpen={showLifespan}
         onClose={() => setShowLifespan(false)}
+      />
+
+      {/* Recall Checker */}
+      <RecallChecker
+        isOpen={showRecallChecker}
+        onClose={() => setShowRecallChecker(false)}
+        prefillType={result.itemType}
       />
     </motion.div>
   );
