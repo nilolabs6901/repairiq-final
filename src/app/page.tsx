@@ -8,6 +8,7 @@ import { Button, Card, Badge } from '@/components/ui';
 import { RepairReplaceCalculator } from '@/components/diagnosis/RepairReplaceCalculator';
 import { ApplianceLifespan } from '@/components/diagnosis/ApplianceLifespan';
 import { WeeklyTipSignup } from '@/components/diagnosis/WeeklyTipSignup';
+import { RecallChecker } from '@/components/diagnosis/RecallChecker';
 import {
   Wrench,
   Zap,
@@ -32,6 +33,7 @@ import {
   Hammer,
   Calculator,
   Activity,
+  ShieldAlert,
 } from 'lucide-react';
 
 const features = [
@@ -107,6 +109,7 @@ const item = {
 export default function HomePage() {
   const [showRepairReplace, setShowRepairReplace] = useState(false);
   const [showLifespan, setShowLifespan] = useState(false);
+  const [showRecallChecker, setShowRecallChecker] = useState(false);
 
   return (
     <div className="min-h-screen bg-surface-50">
@@ -219,27 +222,34 @@ export default function HomePage() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="max-w-2xl mx-auto mt-4 flex flex-col sm:flex-row gap-2"
+              className="max-w-2xl mx-auto mt-4 grid grid-cols-1 sm:grid-cols-3 gap-2"
             >
               <button
                 onClick={() => setShowRepairReplace(true)}
-                className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-amber-200 bg-amber-50 hover:bg-amber-100 transition-colors group"
+                className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-amber-200 bg-amber-50 hover:bg-amber-100 transition-colors group"
               >
                 <Calculator className="w-4 h-4 text-amber-600" />
                 <span className="font-medium text-surface-800 text-sm">
                   Repair vs. Replace
                 </span>
-                <ArrowRight className="w-3.5 h-3.5 text-amber-500 group-hover:translate-x-1 transition-transform" />
               </button>
               <button
                 onClick={() => setShowLifespan(true)}
-                className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-cyan-200 bg-cyan-50 hover:bg-cyan-100 transition-colors group"
+                className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-cyan-200 bg-cyan-50 hover:bg-cyan-100 transition-colors group"
               >
                 <Activity className="w-4 h-4 text-cyan-600" />
                 <span className="font-medium text-surface-800 text-sm">
                   Appliance Lifespan
                 </span>
-                <ArrowRight className="w-3.5 h-3.5 text-cyan-500 group-hover:translate-x-1 transition-transform" />
+              </button>
+              <button
+                onClick={() => setShowRecallChecker(true)}
+                className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-red-200 bg-red-50 hover:bg-red-100 transition-colors group"
+              >
+                <ShieldAlert className="w-4 h-4 text-red-600" />
+                <span className="font-medium text-surface-800 text-sm">
+                  Recall Checker
+                </span>
               </button>
             </motion.div>
 
@@ -565,6 +575,12 @@ export default function HomePage() {
       <ApplianceLifespan
         isOpen={showLifespan}
         onClose={() => setShowLifespan(false)}
+      />
+
+      {/* Recall Checker Modal */}
+      <RecallChecker
+        isOpen={showRecallChecker}
+        onClose={() => setShowRecallChecker(false)}
       />
     </div>
   );
