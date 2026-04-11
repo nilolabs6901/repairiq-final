@@ -22,6 +22,7 @@ import { QuickFeedback } from './QuickFeedback';
 import { WeeklyTipSignup } from './WeeklyTipSignup';
 import { SaveDiagnosis } from './SaveDiagnosis';
 import { RecallChecker } from './RecallChecker';
+import { RecallAlertSignup } from './RecallAlertSignup';
 import { DiagnosisResult, LikelyIssue, TroubleshootingStep, Part, YouTubeVideo, AppRating } from '@/types';
 import { hasRatedDiagnosis } from '@/lib/storage';
 import {
@@ -870,6 +871,15 @@ export function DiagnosisResults({ result, onSave, onShare, onReportOutcome, isS
           itemDescription={result.itemDescription}
           onSave={onSave}
           isSaved={isSaved}
+        />
+      </motion.div>
+
+      {/* SMS Recall Alerts */}
+      <motion.div variants={item}>
+        <RecallAlertSignup
+          applianceType={result.itemType}
+          brand={result.likelyIssues[0]?.title?.split(' ')[0]}
+          diagnosisId={result.id}
         />
       </motion.div>
 
