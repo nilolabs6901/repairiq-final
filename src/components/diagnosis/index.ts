@@ -25,3 +25,4 @@ export { QuickFeedback } from './QuickFeedback';
 export { WeeklyTipSignup } from './WeeklyTipSignup';
 export { SaveDiagnosis } from './SaveDiagnosis';
 export { RecallChecker } from './RecallChecker';
+export { RecallAlertSignup } from './RecallAlertSignup';

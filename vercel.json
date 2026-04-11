@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/recall-alerts/check",
+      "schedule": "0 9 * * *"
+    }
+  ]
+}
